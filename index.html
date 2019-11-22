@@ -1,22 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="style.css">
-    <title>Calendar of life</title>
-</head>
-<body>
-    <div class="quote">The end of life is so near. <br> Do the best you can before it comes.</div>
-    <input type="text" class="date" placeholder="dd.mm.yyyy">
-    <canvas class="calendar" width="800px" height="1400px"></canvas>
 
-    <script>
-        /** 10px for square and 5px for spaces
-          * 52 weeks (squares in line)
-          */
-        
-    </script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style.css">
+  <title>Calendar of life</title>
+</head>
+
+<body>
+  <div class="quote">The end of life is so near. <br> Do the best you can before it comes.</div>
+  <input type="text" class="date" placeholder="dd.mm.yyyy">
+  <input type="button" class="show-calendar" value="show calendar">
+  <canvas class="calendar" width="820px" height="1400px"></canvas>
+
+  <script>
+    /** 10px for square and 5px for spaces
+      * 52 weeks (squares in line)
+      */
+    let day = 30, month = 10, year = 2001,
+      week = 1000 * 60 * 60 * 24 * 7;
+
+    /**
+      * Get week number of year
+      */
+    function getWeekNumber(year, month, day) {
+      var d = new Date(Date.UTC(year, month - 1, day));
+      var dayNum = d.getUTCDay() || 7;
+      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+      var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+      return Math.ceil((((d - yearStart) / 86400000) + 1) / 7)
+    };
+
+    /**
+      * Normalize week number
+      */
+    function getNumberOfWeeksInYear(year) {
+      return Math.max(getWeekNumber(year, '12', '24'), getWeekNumber(year, '12', '31'));
+    }
+
+    function fillSquare(ctx, color, x, y, wx, wy) {
+      let staticIndent = 50;
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, wx, wy);
+    }
+
+    function draw(year, month, day) {
+      let birthday = new Date(`${year} ${month} ${day}`);
+      let now = new Date();
+      let canvas = document.querySelector(".calendar");
+      let ctx = canvas.getContext("2d");
+
+      for (let y = year; y < year + 90; y++) {
+        let weeks = getNumberOfWeeksInYear(y);
+        if (y == year) {
+
+          let birthdayWeek = getWeekNumber(y, month, day);
+          for (let x = 0; x <= weeks; x++) {
+            if (x < birthdayWeek) {
+              fillSquare(ctx, 'grey', x * 15, (y - year) * 15, 10, 10);
+              fillSquare(ctx, 'white', x * 15 + 1, (y - year) * 15 + 1, 8, 8);
+            } else
+              fillSquare(ctx, 'red', x * 15, (y - year) * 15, 10, 10);
+          }
+        } else if (y == now.getFullYear()) {
+          let nowWeek = getWeekNumber(now.getFullYear(), now.getMonth(), now.getDay());
+          for (let x = 0; x <= weeks; x++) {
+            if (x < nowWeek)
+              fillSquare(ctx, 'red', x * 15, (y - year) * 15, 10, 10);
+            else {
+              fillSquare(ctx, 'black', x * 15, (y - year) * 15, 10, 10);
+              fillSquare(ctx, 'white', x * 15 + 1, (y - year) * 15 + 1, 8, 8);
+            }
+          }
+        } else {
+          if (y < now.getFullYear())
+            for (let x = 0; x <= weeks; x++) 
+              fillSquare(ctx, 'red', x * 15, (y - year) * 15, 10, 10);
+          else {
+            for (let x = 0; x <= weeks; x++) {
+              fillSquare(ctx, 'black', x * 15, (y - year) * 15, 10, 10);
+              fillSquare(ctx, 'white', x * 15 + 1, (y - year) * 15 + 1, 8, 8);
+            }
+          }
+        }
+      }
+    }
+    window.onload = function () {
+      draw(year, month, day);
+    }
+
+  </script>
 </body>
+
 </html>

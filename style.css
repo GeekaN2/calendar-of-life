@@ -3,7 +3,7 @@
 
 body {
     font-family: 'Work Sans', sans-serif;
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .quote {
@@ -17,10 +17,10 @@ body {
     display: block;
     outline: none;
     margin: 0 auto;
-    min-width: 200px;
-    border: 1px solid #000;
+    width: 200px;
+    border: 2px solid;
     text-align: center;
-    padding: 0.2rem;
+    padding: 4px;
     border-image: linear-gradient(to top, red, #0000 70%) 1 round;
 }
 
@@ -28,4 +28,19 @@ body {
     display: block;
     border: 1px solid #000;
     margin: 20px auto;
+}
+
+.show-calendar {
+    display: block;
+    margin: 20px auto;
+    width: 212px;
+    outline: none;
+    border: 2px solid;
+    padding: 4px;
+    background: #fff;
+    border-image: linear-gradient(to bottom, red, #0000 70%) 1 round;
+}
+
+.show-calendar:hover {
+    cursor: pointer;
 }
