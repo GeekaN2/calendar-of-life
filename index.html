@@ -76,7 +76,7 @@
               fillSquare(ctx, 'red', x * 15, (y - year) * 15, 10, 10);
           }
         } else if (y == now.getFullYear()) {
-          let nowWeek = getWeekNumber(now.getFullYear(), now.getMonth(), now.getDay());
+          let nowWeek = getWeekNumber(now.getFullYear(), now.getMonth() + 1, now.getDate());
           for (let x = 0; x <= weeks; x++) {
             if (x < nowWeek)
               fillSquare(ctx, 'red', x * 15, (y - year) * 15, 10, 10);
